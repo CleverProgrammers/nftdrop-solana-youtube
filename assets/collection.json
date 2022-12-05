@@ -1,7 +1,7 @@
 {
-  "name": "SMB Collection",
-  "symbol": "SMB",
-  "description": "SMB is a collection of 5000 randomly generated 24x24 pixels NFTs on the Solana Blockchain.",
+  "name": "Crab Collection",
+  "symbol": "CRAB",
+  "description": "Collection of crabs on the blockchain.",
   "image": "collection.png",
   "attributes": [],
   "properties": {
