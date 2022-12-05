@@ -4,18 +4,6 @@ import { useEffect, useState } from "react";
 import { Toaster } from 'react-hot-toast';
 import toast from "react-hot-toast"
 
-import {
-  guestIdentity,
-  Metaplex,
-  walletAdapterIdentity,
-} from "@metaplex-foundation/js";
-
-import { LAMPORTS_PER_SOL } from "@solana/web3.js";
-
-import { useAnchorWallet, useConnection } from "@solana/wallet-adapter-react";
-
-import { CANDY_MACHINE_ID } from "../utils";
-
 const styles = {
   wrapper: 'flex h-[100vh] w-[100vw] bg-[#1d1d1d] text-gray-200',
   container:
@@ -30,91 +18,6 @@ const styles = {
 
 
 export default function Main() {
-  const [metaplex, setMetaplex] = useState();
-  const [candyState, setCandyState] = useState();
-  const [candyStateError, setCandyStateError] = useState();
-  const [candyStateLoading, setCandyStateLoading] = useState(true);
-  const [txError, setTxError] = useState();
-  const [txLoading, setTxLoading] = useState(false);
-
-  const [nfts, setNfts] = useState([])
-
-  const { connection } = useConnection();
-  const wallet = useAnchorWallet();
-
-  useEffect(() => {
-    setMetaplex(
-      Metaplex.make(connection).use(
-        wallet ? walletAdapterIdentity(wallet) : guestIdentity()
-      )
-    );
-  }, [connection, wallet]);
-
-  useEffect(() => {
-    if (!metaplex) return;
-
-    const updateState = async () => {
-      try {
-        const state = await metaplex
-          .candyMachines()
-          .findByAddress({ address: CANDY_MACHINE_ID });
-        setCandyState(state);
-        setNfts(state.items)
-        setCandyStateError(null);
-      } catch (e) {
-        console.log(e);
-        toast.error("Error has occured!")
-        setCandyStateError(e.message);
-      } finally {
-        setCandyStateLoading(false);
-        toast.success("Updated state!")
-      }
-    };
-
-
-    updateState();
-
-
-    // Refresh the state every 30s
-    const intervalId = setInterval(() => updateState(), 30_000);
-
-    return () => clearInterval(intervalId);
-  }, [metaplex]);
-
-  const mint = async () => {
-    if (!metaplex) return;
-
-    setTxLoading(true);
-    setTxError(null);
-
-    try {
-      const mintResult = await metaplex.candyMachines().mint({
-        candyMachine: {
-          address: candyState.address,
-          collectionMintAddress: candyState.collectionMintAddress,
-          candyGuard: candyState.candyGuard,
-        },
-        collectionUpdateAuthority: candyState.authorityAddress,
-        group: null,
-      });
-
-      console.log({ mintResult });
-
-    } catch (e) {
-      console.log(e);
-      toast.error("Failed to mint NFT")
-      setTxError(e.message);
-    } finally {
-      setTxLoading(false);
-      toast.success("Minted NFT")
-    }
-  };
-
-  const soldOut = candyState?.itemsRemaining.eqn(0);
-  const solAmount = candyState?.candyGuard?.guards?.solPayment
-    ? candyState.candyGuard.guards.solPayment.lamports.toNumber() /
-    LAMPORTS_PER_SOL
-    : null;
 
   return (
     <div className={styles.wrapper}>
@@ -135,27 +38,7 @@ export default function Main() {
 
           <Hero />
           <div>
-            {candyStateLoading ? (
-              <div>Loading...</div>
-            ) : candyStateError ? (
-              <div>{candyStateError}</div>
-            ) : (
-              candyState && (
-                <div>
-                  <div>Total items: {candyState.itemsAvailable.toString()}</div>
-                  <div>Minted items: {candyState.itemsMinted.toString()}</div>
-                  <div>Remaining items: {candyState.itemsRemaining.toString()}</div>
-                  {solAmount && <div>Cost: ◎ {solAmount}</div>}
-                  {txError && <div>{txError}</div>}
-                  <div className={styles.buttonContainer}>
-                    <button className={styles.mintButton} onClick={mint} disabled={!wallet || txLoading || soldOut}>
-                      {soldOut ? "SOLD OUT" : txLoading ? "LOADING..." : "MINT"}
-                    </button>
-                  </div>
-
-                </div>
-              )
-            )}
+            {/* Candymachine states will go here! */}
           </div>
         </section>
 

@@ -1,5 +1,4 @@
 import Logo from './Logo'
-import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
 
 const styles = {
   wrapper: 'flex items-center space-x-10',
@@ -32,6 +31,7 @@ const Header = () => {
 
   return (
     <header className={styles.wrapper}>
+      {/* Your Collection logo can go inside this component */}
       <Logo />
 
       <div className={styles.container}>
@@ -40,8 +40,8 @@ const Header = () => {
           <li className={styles.navItem}>Marketplace</li>
           <li className={styles.navItem}>Gallery</li>
         </ul>
-
-        <WalletMultiButton />
+        {/* Wallet connect button goes here!  */}
+        <button className='bg-gray-100 text-gray-900'>Connect Wallet</button>
       </div>
     </header>
   )
