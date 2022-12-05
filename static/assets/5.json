@@ -1,0 +1,24 @@
+{
+    "name": "Studious Crab #6",
+    "symbol": "CRAB",
+    "description": "The Studious Crabs are smart and productive crabs.",
+    "image": "5.png",
+    "attributes": [
+        {
+            "trait_type": "chair",
+            "value": "blue"
+        },
+        {
+            "trait_type": "books",
+            "value": "yellow"
+        }
+    ],
+    "properties": {
+        "files": [
+            {
+                "uri": "5.png",
+                "type": "image/png"
+            }
+        ]
+    }
+}
